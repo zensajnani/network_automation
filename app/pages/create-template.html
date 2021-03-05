@@ -1,0 +1,43 @@
+<link rel="stylesheet" href="../static/css/create-template.css">
+<script src="../static/js/createTemplate.js"></script>
+<section id="createTemplateWrapper" class="create-template-wrapper">
+    <div id="templateBody" class="template-body">
+        <div class="title">
+            Template Information
+        </div>
+        <!-- <h1>Create Template</h1> -->
+        <div class="content">
+            <form action="">
+                <p>Template Name: <input type="text"></p>
+                <p>Description: <input type="text"></p>
+                <p>Template ID: <input type="text" disabled></p>
+                <p>Date Created: <input type="text"></p>
+            </form>
+        </div>
+    </div>
+    <div class="template-body">
+        <div class="title">
+            Create Inputs
+        </div>
+        <div class="content">
+            <form action="">
+                <p>Test Variable: <input type="text" placeholder="Test" id="testVariable"></p>
+                <p>Input Variable Name: <input type="text" placeholder="Name" id="inputVariableName"></p>
+                <p>Input Variable Value: <input type="text" placeholder="Value" id="inputVariableValue"></p>
+            </form>
+            <button id="saveVariables">Save</button>
+
+        </div>
+    </div>
+    <div class="template-body">
+        <div class="title">
+            Template Markup
+        </div>
+        <div class="content">
+            <textarea name="template-markup" id="template-markup" cols="30" rows="10" class="template-markup" placeholder="Add your template Markup here"></textarea>
+            <div class="actions">
+                <button id="saveTemplate" class="save-template">Save Template</button>
+            </div>
+        </div>
+    </div>
+</section>

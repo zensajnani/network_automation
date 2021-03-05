@@ -1,0 +1,17 @@
+$primary: black;
+$border-radius: 7px;
+
+.create-template-wrapper {
+  .template-markup {
+    width: 100%;
+    resize: vertical;
+    background-color: black;
+    color: white;
+    padding: 1rem;
+    border-radius: $border-radius;
+  }
+}
+
+.save-template {
+  width: 100%;
+}
