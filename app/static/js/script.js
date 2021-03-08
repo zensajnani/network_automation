@@ -4,12 +4,31 @@ $(document).ready(function () {
     $('#config-ta').hide()
     $('#actions').hide()
     
-    // instantiate Clipboard js to copy configs
-    // let clipboard = new ClipboardJS('#copy');
     
-    // display templates
+    // display template names in the sidebar
+    getTemplateNames()
+
+    // function to make AJAX GET call to get template names
+    function getTemplateNames() {        
+        $.ajax({
+            url: '/api/get-template-names',
+            type: 'GET',
+            success: (data) => {
+                $("#sidebar .template-names").empty()
+                // for loop to print all template names in sidebar list
+                var i;
+                for (i = 0; i < data.length; i++) {
+                    $("#sidebar .template-names").append('<li>' + data[i] + '</li>')
+                }
+            },
+            error: (data) => {
+                console.log(data)
+            }
+        })
+    }
     
     $(".template-names").on('click','li',function (){
+    // $(".template-names").click(() => {
         // Get template name
         var templateName = $(this).text()
         console.log(templateName)
@@ -18,15 +37,15 @@ $(document).ready(function () {
             url: '/display-template',
             type: 'POST',
             // Send data to backend in JSON format
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
+            // contentType: "application/json; charset=utf-8",
+            // dataType: "json",
             data: {
-                template_name: templateName
+                template_name: templateName     // send template name to the backend
             },
             success: (data) => {
-                console.log("Sent template name to backend")
-                console.log(data)
+                $('.template-container').empty()
                 $('.template-container').html(data)
+                $(".template-names").unbind('click')
             },
             error: () => {
                 console.log("There was an error sending the template name to the backend")
@@ -34,46 +53,46 @@ $(document).ready(function () {
         })
     });
     
-    // // When number of hosts for syslog template are increased or decreased
-    // $('#hostCount').change(() => {
-    //     // Get hosts count
-    //     var hostCount = $('#hostCount').val()
-    //     displaySysHostInput(hostCount)
-    // });
+    // When number of hosts for syslog template are increased or decreased
+    $('#hostCount').change(() => {
+        // Get hosts count
+        var hostCount = $('#hostCount').val()
+        displaySysHostInput(hostCount)
+    });
     
     
-    // // Display Input boxes equal to number of hosts
-    // function displaySysHostInput(hostCount) {
-    //     $('#sysHost').empty();
-    //     // For loop to display multiple input fields
-    //     for (var i = 1; i <= hostCount; i++) {
-    //         $('#sysHost').append("<p id='sysHost'>Enter a syslog host: <input id='getHost' class='get-host' type='text' placeholder='146.36.114.214'></p>")
-    //     }
-    // }
+    // Display Input boxes equal to number of hosts
+    function displaySysHostInput(hostCount) {
+        $('#sysHost').empty();
+        // For loop to display multiple input fields
+        for (var i = 1; i <= hostCount; i++) {
+            $('#sysHost').append("<p id='sysHost'>Enter a syslog host: <input id='getHost' class='get-host' type='text' placeholder='146.36.114.214'></p>")
+        }
+    }
     
-    // // Display multiple lgging hosts equal to number of hosts
-    // function displaySysHostLog() {
-    //     var hostCount = $('#hostCount').val()
-    //     $('#loggingHosts').empty();
-    //     var hosts = document.getElementsByClassName("get-host")
-    //     var i;
-    //     // For loop to get values from the multiple input fields and display in log
-    //     // for (i = 0; i < hostCount; i++) {
-    //     //     $('#loggingHosts').append("<p>logging host <span id='displayHostInConfig'>" + hosts[i].value + "</span></p>")
-    //     // }
+    // Display multiple lgging hosts equal to number of hosts
+    function displaySysHostLog() {
+        var hostCount = $('#hostCount').val()
+        $('#loggingHosts').empty();
+        var hosts = document.getElementsByClassName("get-host")
+        var i;
+        // For loop to get values from the multiple input fields and display in log
+        // for (i = 0; i < hostCount; i++) {
+        //     $('#loggingHosts').append("<p>logging host <span id='displayHostInConfig'>" + hosts[i].value + "</span></p>")
+        // }
         
-    //     // For textarea
-    //     var configText = "logging trap informational\nlogging history size 10\nlogging history size 10"
-    //     for (i = 0; i < hostCount; i++) {
-    //         console.log(i)
-    //         configText += "\nlogging host " + hosts[i].value
-    //     }
-    //     configText += "\nlogging buffered 128000"
-    //     console.log(configText)
-    //     $('#config-ta').text(configText)
-    //     setHeight($('#config-ta'));
+        // For textarea
+        var configText = "logging trap informational\nlogging history size 10\nlogging history size 10"
+        for (i = 0; i < hostCount; i++) {
+            console.log(i)
+            configText += "\nlogging host " + hosts[i].value
+        }
+        configText += "\nlogging buffered 128000"
+        console.log(configText)
+        // $('#config-ta').text(configText)
+        setHeight($('#config-ta'));
         
-    // }
+    }
     
     // When Show Configuration button pressed
     $('#showConfig').click((event) => {
@@ -83,7 +102,7 @@ $(document).ready(function () {
         $('#config-ta').show()
         $('#actions').show()
         // Display multiple lgging hosts equal to number of hosts
-        // displaySysHostLog(hostCount)
+        displaySysHostLog(hostCount)
         
     })
     
@@ -101,7 +120,7 @@ $(document).ready(function () {
         $('#config-ta').select()
         document.execCommand("copy");
         console.log('Copied: ' + $('#config-ta').val())
-        alert("Copied Configuration");
+        console.log("Copied Configuration");
     });
     // Export config
     $('#export').click(() => {

@@ -1,7 +1,9 @@
 <script src="../static/js/script.js"></script>
 <div id="templateBody" class="template-body">
     <div class="title">
-        Syslog {{markup}}
+        <!-- The data we receive from the backend is a tuple of the form (template_id, name, description, markup) -->
+        <!-- This is the Template name -->
+        {{ data[1] }} 
     </div>
     <div class="content">
         <form action="">
@@ -11,7 +13,7 @@
             </div>
             <button id="showConfig">Show Configuration</button>
         </form>
-        <textarea class="config-ta" id="config-ta"  oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'">{{ markup }}</textarea>
+        <textarea class="config-ta" id="config-ta"  oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'">{{ data[3] }}</textarea>
         <div class="actions">
             <button id="copy">Copy</button>
             <button id="export">Export</button>

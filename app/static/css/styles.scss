@@ -75,6 +75,9 @@ main {
       font-weight: 300;
       text-align: center;
     }
+    li {
+      cursor: pointer;
+    }
   }
 
   .template-container {
@@ -100,6 +103,7 @@ main {
       .content {
         padding: 1rem;
         .config-ta {
+          display: none;
           width: 100%;
           resize: none;
           background-color: black;

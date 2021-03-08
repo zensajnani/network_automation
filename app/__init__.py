@@ -2,7 +2,7 @@
 
 import os
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy # to work with SQL database
+# from flask_sqlalchemy import SQLAlchemy # to work with SQL database
 
 # Set basedir variable as absolute path of parent directory
 # which in this case is configGenerator/

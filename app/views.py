@@ -1,5 +1,6 @@
 from app import app
 from flask import render_template, request, jsonify
+from .db import connect_to_db, get_template_names, insert_template, display_table, get_template_row
 
 @app.route("/")
 def index():
@@ -15,11 +16,11 @@ def create_template():
 @app.route('/display-template', methods=['GET', 'POST'])
 def display_template():
     # get template name
-    template_name = 'syslog'
+    template_name = request.form['template_name']
+    template_data =  get_template_row(template_name)
     # set path to the templates html file
-    template_html_path = 'templates/' + template_name + '.html'
     #return html of template component 
-    return jsonify('', render_template(template_html_path))
+    return jsonify('', render_template('display-template.html', data=template_data))
 
 # Function to receive input variables set by the user in the Create Template form
 @app.route('/api/set-inputs', methods=['GET', 'POST'])
@@ -32,14 +33,28 @@ def set_inputs():
 @app.route('/api/save-template', methods=['GET', 'POST'])
 def save_template():
     # data = request.form['markup']
-    # Get markup for template
+    # Get name, description and markup of the new template
     try:
+        template_name = request.form['template_name']
+        template_desc = request.form['template_desc']
         markup = request.form['markup']
     except:
+        template_name = ""
+        template_desc = ""
         markup = "No Markup Provided"
     print("---------------------------")
     print(f"Markup: {markup}")
+    insert_template(template_name, template_desc, markup)
+    return "Saved Template"
 
-    # return jsonify(markup)
+# get template names to display in the sidebar 
+@app.route('/api/get-template-names', methods=['GET', 'POST'])
+def show_template_names():
+    template_names = get_template_names()
+    return jsonify(template_names)
 
-
+# show the entire templates table from the database
+@app.route('/display-all-templates', methods=['GET', 'POST'])
+def display_all_templates():
+    table = display_table("templates")
+    return jsonify(table)
