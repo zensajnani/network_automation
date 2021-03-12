@@ -1,6 +1,9 @@
 
 $(document).ready(function () {
 
+    // Display 1 input variable field when page loads
+    displayInputVariables(1)
+
     // Display Create New Template HTML on the main page when Create New Template button clicked
     $('#createNewTemplate').click(() => {
         // AJAX call to receive HTML and display the form without refreshing the page
@@ -8,22 +11,54 @@ $(document).ready(function () {
             url: '/create',
             type: 'GET',
             success: (data) => {
-                $('.template-container').html(data)
+                $('.template-display').html(data)
                 $('#createNewTemplate').unbind('click')
             }
         })
     })
 
+    // When number of input variables while creating template are increased or decreased
+    $('#variableCount').change(() => {
+        // Get variable count
+        var varCount = $('#variableCount').val()
+        displayInputVariables(varCount)
+    });
+
+
+    // Display Input Variable divs equal to number of inputs
+    function displayInputVariables(varCount) {
+        $('.input-variables').empty();
+        var variableInputForm = `<p class="input-variable"> 
+        <input class="input-variable-name" type="text" placeholder="Variable Name">
+        <input class="input-variable-display" type="text" placeholder="Variable Display Name">
+        <select name="" class="input-variable-type" placeholder="Data Type">
+        <option value="TEXT" autofocus>String</option>
+        <option value="INTEGER">Integer</option>
+        <option value="REAL">Decimal</option>
+        </select>
+        </p>`
+        // For loop to display multiple input fields
+        for (var i = 1; i <= varCount; i++) {
+            $('.input-variables').append(variableInputForm)
+        }
+    }
 
     // When Save button clicked after user has entered input variables
-    $('#saveVariables').click((event) => {
-        alert("Saved")
-        event.preventDefault()
-        var inputVariables = {
-            testVariable: $('#testVariable').val(),
+    function getVariablesObject() {
+        var variableData = [{}]
+        var variableCount = $('#variableCount').val()
+        // get data of all variable names for the template
+        var variableNames = document.getElementsByClassName("input-variable-name")
+        var variableDisplays = document.getElementsByClassName("input-variable-display")
+        var variableDataTypes = document.getElementsByClassName("input-variable-type")
+        var i;
+        for (i = 0; i < variableCount; i++) {
+            variableData[i] = { variable_name: variableNames[i].value, variable_display: variableDisplays[i].value, variable_datatype: variableDataTypes[i].value }
         }
-        sendVariableToBackend(inputVariables)
-    })
+        return variableData
+        // sendVariableToBackend(inputVariables)
+    }
+
 
     // When Save Template button clicked after entering input variables and Markup template
     $('#saveTemplate').click((event) => {
@@ -34,27 +69,37 @@ $(document).ready(function () {
         var templateDesc = $('#createTemplate-desc').val()
         // save value of template markup provided by the user
         var markup = $('#template-markup').val()
+        var variables = getVariablesObject()
+
+        // save all data to sent to the backend as an object
+        templateData = {
+            template_name: templateName,
+            template_desc: templateDesc,
+            markup: markup,
+            variables: variables
+        }
+
         console.log("Save Template")
+        console.log(templateData)
         // send variables and markup to the backend to inject in html file of that template
         $.ajax({
             url: '/api/save-template',
             type: 'POST',
-        // Send data to backend
-        data: {
-            template_name: templateName,
-            template_desc: templateDesc,
-            markup: markup,
-        },
-        success: (data) => {
-            $('#config-ta').html(data)
-            $('#saveTemplate').unbind('click')
-            // Refresh sidebar when template saved to display new template name in sidebar
-            getTemplateNames()
-        },
-        error: (error) => {
-            console.log('There was an error sending the data to the backend: ' )
-            console.log(error)
-        }
+            contentType: "application/json; charset=utf-8",
+            // Send data to backend
+            data: JSON.stringify(templateData),
+            success: (data) => {
+                console.log("saved template")
+                console.log(variables)
+                // $('#config-ta').html(data)
+                $('#saveTemplate').unbind('click')
+                // Refresh sidebar when template saved to display new template name in sidebar
+                getTemplateNames()
+            },
+            error: (error) => {
+                console.log('There was an error sending the data to the backend: ')
+                console.log(error)
+            }
         })
     })
 })
@@ -80,7 +125,7 @@ function sendVariableToBackend(inputVariables) {
 }
 
 // function to make AJAX GET call to get template names
-function getTemplateNames() {        
+function getTemplateNames() {
     $.ajax({
         url: '/api/get-template-names',
         type: 'GET',

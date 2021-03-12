@@ -12,21 +12,37 @@
 </head>
 <body>
     <nav>
-        <h1>Newtork Configuration Generator</h1>
+        <h1>Network Configuration Generator</h1>
     </nav>
     <main>
         <div class="sidebar" id="sidebar">
             <h2>Templates</h2>
             <!-- <a href="{{ url_for('create_template') }}"><h4>Create New Template</h4></a> -->
-            <a id="createNewTemplate"><h4>Create New Template</h4></a>
+            <ul class="main-headings">
+                <li><a id="createNewTemplate">Create New Template</a></li>
+            </ul>
             <ul class="template-names">
                 <li>Loading Templates...</li>
             </ul>
         </div>
+        
         <div class="template-container">
+            <div class="template-display"></div>
+            <div id="fullConfigWrapper" class="full-config-wrapper">
+                <div class="template-body">
+                    <div class="title">Full Configuration</div>
+                    <div class="content">
+                        <button id="showFullConfig" class="show-full-config">Show Full Configuration</button>
+                        <textarea class="config-ta" id="fullConfig" data-template-id="full-config" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'" rows=10></textarea>
+                        <div class="actions">
+                            <button id="copy" class="copy" data-template-id="full-config">Copy</button>
+                            <button id="export" class="export" data-template-id="full-config">Export</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
         </div>
-        
     </main>
 </body>
 </html>

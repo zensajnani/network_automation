@@ -1,22 +1,22 @@
 <script src="../static/js/script.js"></script>
-<div id="templateBody" class="template-body">
-    <div class="title">
+<div id="templateBody" class="template-body" data-template-id="{{ data[0] }}">
+    <div class="title" id="title" data-template-id="{{ data[0] }}">
         <!-- The data we receive from the backend is a tuple of the form (template_id, name, description, markup) -->
         <!-- This is the Template name -->
         {{ data[1] }} 
+        <span class="remove" id="remove">X</span>
     </div>
     <div class="content">
         <form action="">
-            <p>Number of hosts: <input id="hostCount" type="number" value="1"></p>
-            <div class="sys-host" id="sysHost">
-                <p id="sysHost">Enter a syslog host: <input id="getHost" class="get-host" type="text" placeholder="146.36.114.214"></p>
-            </div>
-            <button id="showConfig">Show Configuration</button>
+            {% for variable in variables %}
+            <p class="variable">{{ variable[0] }} <input type="text" class="variable-inputs" id="{{ variable[1] }}" placeholder="{{ variable[2] }}"></p>
+            {% endfor %}
+            <button id="showConfig" class="show-config" data-template-id="{{ data[0] }}">Show Configuration</button>
         </form>
-        <textarea class="config-ta" id="config-ta"  oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'">{{ data[3] }}</textarea>
+        <textarea readonly class="config-ta" id="config-ta" data-template-id="{{ data[0] }}" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'">{{ markup }}</textarea>
         <div class="actions">
-            <button id="copy">Copy</button>
-            <button id="export">Export</button>
+            <button id="copy" class="copy" data-template-id="{{ data[0] }}">Copy</button>
+            <button id="export" class="export" data-template-id="{{ data[0] }}">Export</button>
         </div>
     </div>
 </div>
