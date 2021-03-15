@@ -7,8 +7,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="../static/js/script.js" type="module"></script>
     <script src="../static/js/createTemplate.js" type="module"></script>
+    <script src="../static/js/manageTemplates.js" type="module"></script>
     <link rel="stylesheet" href="../static/css/styles.css">
-    <title>Device Configs</title>
+    <title>Network Configs</title>
 </head>
 <body>
     <nav>
@@ -19,7 +20,8 @@
             <h2>Templates</h2>
             <!-- <a href="{{ url_for('create_template') }}"><h4>Create New Template</h4></a> -->
             <ul class="main-headings">
-                <li><a id="createNewTemplate">Create New Template</a></li>
+                <a id="manageTemplate" href="/manage-templates"><li>Manage Templates</li></a>
+                <a id="createNewTemplate"><li>Create New Template</li></a>
             </ul>
             <ul class="template-names">
                 <li>Loading Templates...</li>

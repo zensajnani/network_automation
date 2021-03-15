@@ -79,7 +79,14 @@ def show_configuration():
     return rendered_markup
 
 # show the entire templates table from the database
-@app.route('/display-all-templates', methods=['GET', 'POST'])
+@app.route('/api/display-all-templates', methods=['GET', 'POST'])
 def display_all_templates():
     table = display_table("templates")
     return jsonify(table)
+
+
+# Manage Templplates (Edit/Delete)
+@app.route('/manage-templates', methods=['GET', 'POST'])
+def manage_templates():
+    templates = display_table("templates")
+    return render_template('manage-templates.html', templates=templates)
