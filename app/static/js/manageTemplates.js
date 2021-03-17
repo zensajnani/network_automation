@@ -54,6 +54,13 @@ $(document).ready(function () {
         editTemplate(templateId)
     })
 
+    // // When Table row clicked
+    // $(".display-templates").on('click', 'tr', function () {
+    //     var templateId = $(this).attr('data-template-id');
+    //     console.log("Edit: " + templateId)
+    //     editTemplate(templateId)
+    // })
+
 
     // When delete button clicked
     $(".display-templates").on('click', 'button.delete', function () {

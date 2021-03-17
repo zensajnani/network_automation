@@ -6,6 +6,8 @@ $(document).ready(function () {
 
     // Display Create New Template HTML on the main page when Create New Template button clicked
     $('#createNewTemplate').click(() => {
+        // hide Full Configuration DIV
+        $('#fullConfigWrapper').hide();
         // AJAX call to receive HTML and display the form without refreshing the page
         $.ajax({
             url: '/create',
@@ -16,6 +18,10 @@ $(document).ready(function () {
             }
         })
     })
+    // remove create template display from container when cross button clicked
+    $(".remove").off().on('click', function () {
+        $('#createTemplateWrapper').remove();
+    });
 
     // When number of input variables while creating template are increased or decreased
     $('#variableCount').change(() => {

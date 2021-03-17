@@ -30,7 +30,7 @@ $(document).ready(function () {
     // Display template form and data when template name clicked from sidebar (eg: variable names, Show Configuration, Copy and Export button)
     $(".template-names").on('click', 'li', function () {
         $('#createTemplateWrapper').hide() // if Create Template form present, hide it
-
+        $('#fullConfigWrapper').show() // if Full Configuration absent, show it
         // Get template name
         var templateName = $(this).text()
         console.log(templateName)

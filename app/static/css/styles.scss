@@ -47,6 +47,9 @@ nav {
   top: 0;
   width: 100%;
   z-index: 2;
+  a {
+      text-decoration: none;
+  }
   h1 {
     text-align: center;
     color: white;
@@ -71,6 +74,8 @@ main {
     // overflow: auto;
     a {
       cursor: pointer;
+      color: white;
+      text-decoration: none;
     }
     h2 {
       color: white;
@@ -88,6 +93,8 @@ main {
     }
     ul.template-names {
       margin-top: 1rem;
+      height: 75%;
+      overflow-y: scroll;
     }
     li {
       cursor: pointer;

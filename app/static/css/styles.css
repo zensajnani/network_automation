@@ -47,6 +47,10 @@ nav {
   z-index: 2;
 }
 
+nav a {
+  text-decoration: none;
+}
+
 nav h1 {
   text-align: center;
   color: white;
@@ -70,6 +74,8 @@ main .sidebar {
 
 main .sidebar a {
   cursor: pointer;
+  color: white;
+  text-decoration: none;
 }
 
 main .sidebar h2 {
@@ -91,6 +97,8 @@ main .sidebar ul.main-headings {
 
 main .sidebar ul.template-names {
   margin-top: 1rem;
+  height: 75%;
+  overflow-y: scroll;
 }
 
 main .sidebar li {

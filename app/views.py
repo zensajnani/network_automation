@@ -19,7 +19,7 @@ def display_template():
     # get template name
     template_name = request.form['template_name']
     template_data =  get_template_row(template_name)
-    markup = template_data[3]
+    markup = template_data['markup']
     variables = get_template_variables(template_name) # get variables from the database
     # markup_variable_keys = get_markup_variables(template_name) # get variable keys from markup template
     # markup=Template(markup).render({'var1': 'Var 1'})
@@ -80,7 +80,7 @@ def show_configuration():
     # get template data from database by passing template id
     template_data = get_template_row(template_id)
     # get markup from template_data
-    markup = template_data[3]
+    markup = template_data['markup']
     print(variables)
     rendered_markup = render_variables_markup(variables, markup)
     print(f"rendered_markup from api/show-config: \n {rendered_markup}")
