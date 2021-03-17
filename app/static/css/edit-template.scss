@@ -1,0 +1,143 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;1,200;1,300;1,400;1,500&display=swap");
+
+
+$primary: black;
+$border-radius: 7px;
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
+}
+
+button {
+  background-color: $primary;
+  color: white;
+  padding: 0.75rem 1rem;
+  margin: 0.25rem;
+  margin-left: 0;
+  border: 1px solid $primary;
+  cursor: pointer;
+  border-radius: 3px;
+  font-family: "Poppins", sans-serif;
+  &:hover {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+  }
+}
+
+input,
+select {
+  font-family: "Poppins", sans-serif;
+  border: 2px solid black;
+  padding: 0.25rem;
+  margin: 0.25rem;
+  font-size: 1rem;
+  border-radius: $border-radius;
+}
+
+nav {
+  background-color: black;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+  a {
+      text-decoration: none;
+  }
+  h1 {
+    text-align: center;
+    color: white;
+    padding: 1rem 0;
+    font-size: 1.5rem;
+  }
+}
+
+
+.edit-template-wrapper {
+    margin-left: 1rem;
+    margin-top: 4.5rem;
+    margin-right: 1rem;
+    // min-height: 1000px;
+    .template-body {
+      padding: 0;
+      min-height: 90%;
+      // width: 100%;
+      border-radius: $border-radius;
+      margin: 1.5rem;
+      // border: 1px solid black;
+      box-shadow: 4px 4px 10px 5px rgba(0, 0, 0, 0.2);
+      .title {
+        font-weight: 400;
+        font-size: 1.5rem;
+        color: white;
+        background-color: black;
+        padding: 1rem 1rem;
+        text-align: center;
+        border-radius: $border-radius $border-radius 0 0;
+        position: relative;
+        .remove {
+          font-size: 1rem;
+          position: absolute;
+          right: 0.5rem;
+          top: 50%;
+          transform: translateY(-50%);
+          border-radius: $border-radius;
+          color: black;
+          background-color: white;
+          padding: 0.5rem 0.9rem;
+          line-height: 1.5rem;
+          cursor: pointer;
+          &:hover {
+            background-color: red;
+            color: white;
+          }
+        }
+      }
+      .content {
+        padding: 1rem;
+        .config-ta,
+        .full-config {
+          // display: none;
+          width: 100%;
+          resize: none;
+          background-color: black;
+          color: white;
+          border-radius: $border-radius;
+          padding: 1rem;
+        }
+        .config {
+          #displayHostInConfig {
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+
+
+.edit-template-wrapper {
+    margin-top: 5rem;
+    
+  .template-markup {
+    width: 100%;
+    resize: vertical;
+    background-color: black;
+    color: white;
+    padding: 1rem;
+    border-radius: $border-radius;
+  }
+}
+
+.actions {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}

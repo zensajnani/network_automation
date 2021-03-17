@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/css/edit-template.css">
+    <script src="../static/js/editTemplate.js"></script>
+    <title>Edit Template</title>
+</head>
+<body>
+    <nav>
+        <a href="/"><h1>Network Configuration Generator</h1></a>
+    </nav>
+    <section id="editTemplateWrapper" class="edit-template-wrapper">
+        <div id="templateBody" class="template-body">
+            <div class="title">
+                EDIT {{ template_name }}
+            </div>
+            <!-- <h1>Create Template</h1> -->
+            <div class="content">
+                <form action="">
+                    <p>Template ID: <b><span id='templateId'>{{ template_id }}</span></b></p>
+                    <!-- <p>Template Name: <input type="text" placeholder="{{ template_name }}" id="editTemplate-name" required value="{{ template_name }}" disabled></p> -->
+                    <p>Template Name: <b><span id='editTemplate-name'>{{ template_name }}</span></b></p>
+                    <p>Description: <input type="text" placeholder="Syslog Description" id="editTemplate-desc" required value="{{ template_desc }}"></p>
+                </form>
+            </div>
+        </div>
+        <div class="template-body">
+            <div class="title">
+                Create Inputs
+            </div>
+            <div class="content">
+                {{ variables }}
+                <form action="">
+                    <!-- <p>Number of Input Variables: <input id="variableCount" type="number" value="{{ var_count }}" min="{{ var_count }}"></p> -->
+                    <p>Add Another Variable: <button class="add-variable" id="addVariable">+</button></p>
+                    <div class="input-variables">
+                        <p id="inputVariable">
+                            <input id="inputVariableName" class="input-variable-name" type="text" placeholder="Variable Name">
+                            <input id="inputVariableDisplay" type="text" placeholder="Variable Display Name">
+                            <select name="" id="inputVariableType" placeholder="Data Type">
+                                <option value="TEXT" autofocus>String</option>
+                                <option value="INTEGER">Integer</option>
+                                <option value="REAL">Decimal</option>
+                            </select>
+                        </p>
+                    </div>
+                </form>
+                <!-- <button id="saveVariables">Save</button> -->
+                
+            </div>
+        </div>
+        <div class="template-body">
+            <div class="title">
+                Template Markup
+            </div>
+            <div class="content">
+                <textarea name="template-markup" id="template-markup" cols="30" rows="10" class="template-markup" placeholder="Add your template Markup here">{{ markup }}</textarea>
+                <div class="actions">
+                    <button id="discardChanges" class="discard-changes">Discard Changes</button>
+                    <button id="editTemplate" class="edit-template">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        $(document).ready(function () {
+            var templateData = {{ data|safe }}
+            var varCount = {{ var_count }};
+            var variables = {{ variables|safe }}
+            console.log(templateData)
+            console.log(variables)
+            displayInputVariables(varCount, variables)
+            
+            
+            // When Edit template button clicked
+            $('#editTemplate').click(() => {
+                var newTemplateData = getNewTemplateData();
+                newTemplateData.prevId = "{{ template_id }}";
+                newVariables = getNewVariablesObject()
+                newTemplateData.newVariables = newVariables
+                sendNewDataToBackend(newTemplateData);
+            })
+            
+            // update template_id when user changes Template Name live 
+            $('#editTemplate-name').on('input', function() { 
+                generateTemplateId()
+            });
+            
+            // When button clicked to add new variable
+            $('#addVariable').click((e) => {
+                e.preventDefault()
+                var variableInputForm = `<p class="input-variable"> 
+                    <input class="input-variable-name" type="text" placeholder="Variable Name">
+                    <input class="input-variable-display" type="text" placeholder="Variable Display Name">
+                    <select name="" id="inputVariableType" class="input-variable-type" placeholder="Data Type">
+                        <option value="TEXT" autofocus>String</option>
+                        <option value="INTEGER">Integer</option>
+                        <option value="REAL">Decimal</option>
+                    </select>
+                    <button class="delete-variable">X</button>
+                </p>`
+                $('.input-variables').append(variableInputForm)
+            })
+            
+            // When delete variable button clicked
+            $(document).off().on('click', '.delete-variable', function (event) {
+                $(this).closest('.input-variable').remove();
+                event.preventDefault()
+            });
+            
+        });
+        
+        // Display Input Variable divs equal to number of inputs
+        function displayInputVariables(varCount, variables) {
+            $('.input-variables').empty();
+            var variableInputForm;
+            // For loop to display multiple input fields
+            for (var i = 0; i < varCount; i++) {
+                variableInputForm = `<p class="input-variable"> 
+                    <input class="input-variable-name" type="text" placeholder="Variable Name" value="${variables[i]['name']}">
+                    <input class="input-variable-display" type="text" placeholder="Variable Display Name" value="${variables[i]['display']}">
+                    <select name="" class="input-variable-type" placeholder="Data Type">
+                        <option value="${variables[i]['datatype']}" autofocus>${variables[i]['datatype']}</option>
+                    </select>
+                    <button class="delete-variable">X</button>
+                </p>`
+                $('.input-variables').append(variableInputForm)
+            }
+        }
+        
+        // function to create object of new template data
+        function getNewTemplateData() {
+            newTemplateData = {
+                id: $('#templateId').text(),
+                name: $('#editTemplate-name').val(),
+                desc: $('#editTemplate-desc').val(),
+                markup: $('#template-markup').val(),
+            }
+            console.log(newTemplateData)
+            return newTemplateData
+        }
+        
+        
+        // function to change template_id when template_name changes
+        function generateTemplateId() {
+            var changedTemplateName = $('#editTemplate-name').val()
+            var changedTemplateId = changedTemplateName.replace(/ /g,'_')
+            changedTemplateId = changedTemplateId.toLowerCase();
+            $('#templateId').html(changedTemplateId)
+        }
+        
+        // When Save Changes button clicked after user has entered input variables, get object of new variables
+        function getNewVariablesObject() {
+            var variableData = [{}]
+            // var variableCount = $('#variableCount').val()
+            // get data of all variable names for the template
+            var variableNames = document.getElementsByClassName("input-variable-name")
+            var variableDisplays = document.getElementsByClassName("input-variable-display")
+            var variableDataTypes = document.getElementsByClassName("input-variable-type")
+            var i;
+            for (i = 0; i < variableNames.length; i++) {
+                variableData[i] = { name: variableNames[i].value, display: variableDisplays[i].value, datatype: variableDataTypes[i].value }
+            }
+            return variableData
+        }
+        
+        // function to send new data to the backend
+        function sendNewDataToBackend(newTemplateData) {
+            $.ajax({
+                url: '/api/save-changes',
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                // Send data to backend
+                data: JSON.stringify(newTemplateData),
+                success: (data) => {
+                    console.log("saved changes")
+                    console.log(data)
+                },
+                error: (error) => {
+                    console.log('There was an error sending the data to the backend: ')
+                    console.log(error)
+                }
+            })
+        }
+        
+    </script>

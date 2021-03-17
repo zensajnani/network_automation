@@ -119,8 +119,14 @@ def get_template_row(template_name):
     c = conn.cursor()
     c.execute(f"SELECT * FROM templates WHERE template_id='{template_id}'")
     row = c.fetchone()
+    template_data = {
+        'id': row[0],
+        'name': row[1],
+        'description': row[2],
+        'markup': row[3]
+    }
     conn.close()
-    return row
+    return template_data
 
 # get all variables for a template
 def get_template_variables(template_name):
@@ -128,7 +134,18 @@ def get_template_variables(template_name):
     conn = connect_to_db()
     c = conn.cursor()
     c.execute(f"SELECT variable_display, variable_name, datatype FROM variables WHERE template_id='{template_id}'")
-    variables = c.fetchall()
+    variables_tuple = c.fetchall()
+    print("Variables Tuple")
+    print(variables_tuple)
+    # return variables as a dictionary
+    variables=[]
+    var_dict = {}
+    for var in variables_tuple:
+        var_dict['name'] = var[1]
+        var_dict['display'] = var[0]
+        var_dict['datatype'] = var[2]
+        var_dict_copy = var_dict.copy()
+        variables.append(var_dict_copy)
     conn.close()
     return variables
 
@@ -163,4 +180,60 @@ def render_variables_markup(variables, markup):
     print(markup_render)
     return markup_render
 
+# Delete template from template table and variables associated with it from variables table
+def delete_template_from_db(template_id):
+    conn = connect_to_db()
+    c = conn.cursor()
+    c.execute("DELETE FROM templates WHERE template_id=:template_id", {'template_id': template_id})
+    c.execute("DELETE FROM variables WHERE template_id=:template_id", {'template_id': template_id})
+    conn.commit()
+    conn.close()
 
+# Edit template values
+def edit_template_db(prev_template_id, new_template_data):
+    conn = connect_to_db()
+    c = conn.cursor()
+    new_template_id = new_template_data['id']
+    c.execute("""UPDATE templates
+    SET description = :new_description, markup = :new_markup
+    WHERE template_id = :prev_template_id ;""", 
+    {'prev_template_id': prev_template_id, 'new_description': new_template_data['desc'], 'new_markup': new_template_data['markup']})
+    conn.commit()
+    conn.close()
+
+# Edit variables
+def edit_variables_db(template_id, new_variables):
+    prev_variables = get_template_variables(template_id)
+    # Step 1: find newly inserted variables. I.E. Variables present in new_variables but not in prev_variables
+    inserted_vars = [variable for variable in new_variables if variable not in prev_variables]
+    # Step 2: find deleted variables. I.E. Variables present in prev_variables but not in new_variables
+    deleted_vars = [variable for variable in prev_variables if variable not in new_variables]
+    print("INSERTED VARIABLES: ")
+    print(inserted_vars)
+    print("DELETED VARIABLES: ")
+    print(deleted_vars)
+    conn = connect_to_db()
+    c = conn.cursor()
+    for variable in inserted_vars:
+        c.execute("""
+        INSERT INTO variables (variable_name, variable_display, datatype, template_id)
+        VALUES (:name, :display, :datatype, :template_id);
+        """, {
+            'name': variable['name'],
+            'display': variable['display'],
+            'datatype': variable['datatype'],
+            'template_id': template_id,
+        })
+    for variable in deleted_vars:
+        c.execute("""
+        DELETE FROM variables
+        WHERE variable_name=:name AND variable_display=:display AND datatype=:datatype AND template_id=:template_id;
+        """, {
+            'name': variable['name'],
+            'display': variable['display'],
+            'datatype': variable['datatype'],
+            'template_id': template_id,
+        })
+    conn.commit()
+    conn.close()
+    print("Updated Variables")
