@@ -4,6 +4,9 @@ section.manage-templates-wrapper {
     padding: 2rem;
 }
 
-tr {
-    cursor: pointer;
-}
+// tr {
+//     cursor: pointer;
+// }
+
+// table.dataTable tr:hover { background-color:  red; }
+table.dataTable tr:nth-child(even)  { background-color: #D3D3D3;  }

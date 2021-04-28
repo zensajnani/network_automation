@@ -3,7 +3,7 @@ section.manage-templates-wrapper {
   padding: 2rem;
 }
 
-tr {
-  cursor: pointer;
+table.dataTable tr:nth-child(even) {
+  background-color: #D3D3D3;
 }
 /*# sourceMappingURL=manage-templates.css.map */

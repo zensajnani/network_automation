@@ -77,14 +77,20 @@
             displayInputVariables(varCount, variables)
             
             
-            // When Edit template button clicked
+            // When Save Changes button clicked
             $('#editTemplate').click(() => {
                 var newTemplateData = getNewTemplateData();
                 newTemplateData.prevId = "{{ template_id }}";
                 newVariables = getNewVariablesObject()
                 newTemplateData.newVariables = newVariables
                 sendNewDataToBackend(newTemplateData);
+                location.href = '/manage-templates';
             })
+            
+            // When Discard Changes button clicked
+            $('#discardChanges').click(function() {
+                location.reload();
+            });
             
             // update template_id when user changes Template Name live 
             $('#editTemplate-name').on('input', function() { 
@@ -179,10 +185,11 @@
                 data: JSON.stringify(newTemplateData),
                 success: (data) => {
                     console.log("saved changes")
-                    console.log(data)
+                    alert("Successfully saved changes!")
                 },
                 error: (error) => {
                     console.log('There was an error sending the data to the backend: ')
+                    alert("There was an error saving the changes")
                     console.log(error)
                 }
             })

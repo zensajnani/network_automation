@@ -13,7 +13,7 @@
             {% endfor %}
             <button id="showConfig" class="show-config" data-template-id="{{ data['id'] }}">Show Configuration</button>
         </form>
-        <textarea readonly class="config-ta" id="config-ta" data-template-id="{{ data['id'] }}" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'">{{ markup }}</textarea>
+        <textarea readonly class="config-ta" id="config-ta" data-template-id="{{ data['id'] }}" oninput="this.style.height = '';this.style.height = this.scrollHeight + 'px'" rows=5>{{ markup }}</textarea>
         <div class="actions">
             <button id="copy" class="copy" data-template-id="{{ data['id'] }}">Copy</button>
             <button id="export" class="export" data-template-id="{{ data['id'] }}">Export</button>

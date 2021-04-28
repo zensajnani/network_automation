@@ -101,10 +101,12 @@ $(document).ready(function () {
                 $('#saveTemplate').unbind('click')
                 // Refresh sidebar when template saved to display new template name in sidebar
                 getTemplateNames()
+                alert("Successfully created Template: " + templateName)
             },
             error: (error) => {
                 console.log('There was an error sending the data to the backend: ')
                 console.log(error)
+                alert("Failed to created Template: " + templateName)
             }
         })
     })

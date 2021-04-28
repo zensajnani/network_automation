@@ -9,7 +9,7 @@ $(document).ready(function () {
         "columnDefs": [{
             "targets": -1,
             "data": null,
-            "defaultContent": "<nobr><button class='edit'>E</button><button class='delete'>X</button></nobr>"
+            "defaultContent": "<nobr><button class='edit'>Edit</button><button class='delete'>X</button></nobr>"
         }]
     });
 
